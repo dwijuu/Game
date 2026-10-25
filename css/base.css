@@ -1,0 +1,198 @@
+/* ==============================================================================
+   GAME SITE — BASE
+   기존 사이트(20241754_김민솔) 디자인 토큰 계승
+   · 컬러: Ref/색감/색감_최종.png (코발트 #0f42cf · 옐로 #fab800 · 딥 네이비 #141824 · 레드 #e8342a)
+   · 폰트: Chakra Petch / Rajdhani / Noto Sans KR + 모노 라벨
+   · 1920 x 920 고정 캔버스 균일 스케일
+   ============================================================================== */
+
+:root {
+  --c-white: #ffffff;
+  --c-steel-blue: #0f42cf;
+  --c-blue: #3a6ea5;
+  --c-cyan: #7ec8d8;
+  --c-deep-navy: #141824;
+  --c-dark-core: #0d1017;
+  --c-slate: #232733;
+  --c-slate-dark: #181c26;
+  --c-accent-yellow: #fab800;
+  --c-yellow-soft: #e8c44a;
+  --c-alert-red: #e8342a;
+  --c-buff: #7ec8d8;
+  --c-debuff: #e8342a;
+
+  --panel-bg: rgba(18, 22, 32, 0.92);
+  --panel-border: rgba(255, 255, 255, 0.18);
+  --txt: #ffffff;
+  --txt-dim: rgba(255, 255, 255, 0.65);
+  --txt-faint: rgba(255, 255, 255, 0.38);
+  --line: rgba(255, 255, 255, 0.16);
+
+  --font-display: "Chakra Petch", "Noto Sans KR", sans-serif;
+  --font-headline: "Rajdhani", "Noto Sans KR", sans-serif;
+  --font-mono: "Consolas", "JetBrains Mono", monospace;
+  --font-body: "Noto Sans KR", -apple-system, "Segoe UI", sans-serif;
+
+  --ease-snappy: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+
+html, body {
+  width: 100%; height: 100%;
+  overflow: hidden;
+  background: #000;
+  color: var(--txt);
+  font-family: var(--font-body);
+  user-select: none;
+}
+
+button { font-family: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+button:disabled { cursor: default; }
+img { -webkit-user-drag: none; }
+
+#viewport { position: fixed; inset: 0; background: #000; overflow: hidden; }
+
+.g-canvas {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 1920px; height: 920px;
+  transform-origin: center center;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+  background: #0c1017;
+}
+
+#screen-root, #fx-root { position: absolute; inset: 0; }
+#fx-root { pointer-events: none; z-index: 900; }
+#fx-root > * { pointer-events: auto; }
+
+.g-screen { position: absolute; inset: 0; overflow: hidden; }
+
+.g-ico { width: 100%; height: 100%; display: block; }
+
+/* ── 화면 페이드 (기존 사이트 .screen-fade) ── */
+.g-fade-in { animation: gFadeIn 0.28s var(--ease-snappy) both; }
+@keyframes gFadeIn { from { opacity: 0; transform: scale(0.996); } to { opacity: 1; transform: none; } }
+
+/* ── 상단 컨트롤 바 (기존 .btn-return-lobby 스타일) ── */
+.g-topbar {
+  position: absolute; top: 34px; left: 44px; right: 44px;
+  display: flex; align-items: center; gap: 18px;
+  z-index: 50;
+}
+.g-back {
+  display: inline-flex; align-items: center; gap: 10px;
+  height: 46px; padding: 0 22px 0 16px;
+  background: var(--panel-bg);
+  border: 1.5px solid var(--panel-border);
+  border-left: 3px solid var(--c-accent-yellow);
+  font-family: var(--font-display);
+  font-weight: 700; font-size: 17px; letter-spacing: 0.12em;
+  color: var(--txt);
+  transition: border-color 0.16s ease, transform 0.16s ease;
+}
+.g-back:hover { border-color: rgba(255,255,255,0.55); border-left-color: var(--c-accent-yellow); transform: translateY(-2px); }
+.g-back .g-ico { width: 16px; height: 16px; }
+.g-badge {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--font-display); font-weight: 700; font-size: 17px; letter-spacing: 0.1em;
+}
+.g-badge .num {
+  background: var(--c-accent-yellow); color: var(--c-deep-navy);
+  font-size: 13px; padding: 2px 6px; font-weight: 800;
+}
+.g-mono { font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.14em; color: var(--txt-faint); text-transform: uppercase; }
+
+/* ── 버튼 ── */
+.g-btn {
+  position: relative;
+  display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+  height: 64px; min-width: 220px; padding: 0 36px;
+  font-family: var(--font-display); font-size: 24px; font-weight: 700; letter-spacing: 0.08em;
+  background: var(--panel-bg);
+  border: 1.5px solid var(--panel-border);
+  transition: transform 0.16s cubic-bezier(0.2,0,0,1), border-color 0.16s ease, filter 0.16s ease;
+}
+.g-btn:hover:not(:disabled) { transform: translateY(-3px); border-color: rgba(255,255,255,0.55); }
+.g-btn:active:not(:disabled) { transform: translateY(1px); }
+.g-btn:disabled { opacity: 0.4; }
+/* 메인 액션 버튼 — 옐로 + 계단 노치 (기존 gm-card 실루엣) */
+.g-btn-primary {
+  background: var(--c-accent-yellow);
+  color: var(--c-deep-navy);
+  border-color: var(--c-accent-yellow);
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+}
+.g-btn-primary:hover:not(:disabled) { border-color: var(--c-accent-yellow); filter: brightness(1.06); }
+.g-btn-primary::after {
+  content: "▶▶"; font-size: 12px; letter-spacing: -2px; opacity: 0.6;
+}
+.g-btn-ghost { background: rgba(255,255,255,0.92); color: var(--c-deep-navy); border-color: #fff; }
+
+/* ── 패널 (기존 노치 패널) ── */
+.g-panel {
+  background: var(--panel-bg);
+  border: 1.5px solid var(--panel-border);
+  clip-path: polygon(0 0, 190px 0, 206px 14px, 100% 14px, 100% 100%, 0 100%);
+}
+
+/* ── 툴팁 (기존 .js-global-tooltip) ── */
+.g-tooltip {
+  position: fixed; z-index: 99999; display: none; pointer-events: none;
+  max-width: min(380px, calc(100vw - 16px));
+  background: #101a2b; color: #fff;
+  font-size: 14px; font-weight: 500; line-height: 1.55; letter-spacing: 0.01em;
+  padding: 10px 14px;
+  border-left: 3px solid var(--c-accent-yellow);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+  word-break: keep-all;
+}
+.g-tooltip.visible { display: block; }
+.g-tooltip .tt-title { font-weight: 800; font-size: 15px; margin-bottom: 4px; display: flex; gap: 8px; align-items: baseline; }
+.g-tooltip .tt-tag { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; color: var(--c-accent-yellow); text-transform: uppercase; }
+.g-tooltip .tt-tag.buff { color: var(--c-buff); }
+.g-tooltip .tt-tag.debuff { color: #ff7a72; }
+.g-tooltip .tt-sub { color: rgba(255,255,255,0.6); font-size: 12px; margin-top: 4px; }
+.g-tooltip em { font-style: normal; color: var(--c-accent-yellow); font-weight: 700; }
+.g-tooltip .tt-row + .tt-row { margin-top: 6px; padding-top: 6px; border-top: 1px solid rgba(255,255,255,0.1); }
+
+/* ── 오류 화면 ── */
+.g-error {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px;
+  background: #0c1017;
+}
+.g-error-code { font-family: var(--font-mono); letter-spacing: 0.2em; color: var(--c-alert-red); }
+.g-error-msg { font-size: 22px; }
+
+/* ── 공통 배경 장식 (기존 selection-bg-deco 축약) ── */
+.g-bg-grid {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(126,200,216,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(126,200,216,0.05) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+.g-hash {
+  position: absolute; width: 52px; height: 18px; pointer-events: none;
+  background: repeating-linear-gradient(-45deg, rgba(126,200,216,0.3) 0 3px, transparent 3px 6px);
+  border-top: 2px solid var(--c-accent-yellow);
+}
+.g-ghost-num {
+  position: absolute; font-family: var(--font-headline); font-weight: 700; line-height: 1;
+  color: rgba(255,255,255,0.04); letter-spacing: -0.04em; pointer-events: none;
+}
+.g-barcode {
+  display: inline-block; width: 44px; height: 12px;
+  background-image: repeating-linear-gradient(to right, currentColor 0 1.5px, transparent 1.5px 3px, currentColor 3px 4.5px, transparent 4.5px 6px);
+}
+
+/* 세로 화면 안내 */
+.g-rotate-notice {
+  display: none; position: fixed; inset: 0; z-index: 100000;
+  align-items: center; justify-content: center;
+  background: #0c1017; color: #fff; font-size: 18px; letter-spacing: 0.04em;
+}
+@media (orientation: portrait) and (max-width: 900px) {
+  .g-rotate-notice { display: flex; }
+}
