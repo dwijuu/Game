@@ -1,0 +1,138 @@
+/**
+ * 작은 화면(휴대폰 · 작은 태블릿) 전용 확대 규칙
+ * ─────────────────────────────────────────────────────────────
+ *  · 1920×920 캔버스를 화면에 맞춰 통째로 줄이므로, 휴대폰에서는 글씨 · 버튼이 매우 작아짐
+ *  · util.js 가 캔버스 배율이 0.62 미만일 때 <html class="g-mobile"> 과 --m(1.15~1.4)을 지정
+ *  · 배치(레이아웃)는 그대로 두고, ① 글씨 크기를 키우거나 ② 묶음 단위로 scale(모서리 기준)해서 키움
+ *  · 데스크톱(배율 0.62 이상)에는 아무 영향 없음
+ */
+
+/* ── 공통 ── */
+.g-mobile .g-back { height: 60px; font-size: 22px; padding: 0 26px 0 18px; }
+.g-mobile .g-back .g-ico { width: 20px; height: 20px; }
+.g-mobile .g-badge { font-size: 22px; }
+.g-mobile .g-badge .num { font-size: 17px; }
+.g-mobile .g-mono { font-size: 16px; }
+.g-mobile .g-btn { height: 74px; font-size: 28px; }
+
+/* 툴팁 (화면 실제 픽셀 기준이라 조금만) */
+.g-mobile .g-tooltip { font-size: 15px; max-width: min(460px, calc(100vw - 16px)); }
+.g-mobile .g-tooltip .tt-title { font-size: 16px; }
+.g-mobile .g-tooltip .tt-sub { font-size: 13px; }
+
+/* ── 챕터 선택 (테이프) ── */
+.g-mobile .cs-caption-title { font-size: 38px; }
+.g-mobile .cs-caption-hint { font-size: 22px; }
+
+/* ── 챕터 맵 (스테이지 선택) ── */
+.g-mobile .cm-chapter-title { scale: var(--m); transform-origin: top left; }
+.g-mobile .cm-node-name { font-size: 32px; }
+.g-mobile .cm-node-sub { font-size: 21px; }
+.g-mobile .cm-node-state { font-size: 17px; top: 18px; }
+.g-mobile .cm-rail-time { font-size: 17px; }
+.g-mobile .cm-new-flag { font-size: 16px; }
+.g-mobile .cm-popup { height: auto; min-height: 520px; max-height: 780px; }
+.g-mobile .cm-popup-eyebrow { font-size: 18px; }
+.g-mobile .cm-popup-tags .cm-tag { font-size: 16px; }
+.g-mobile .cm-popup-desc { font-size: 25px; }
+.g-mobile .cm-popup-sub { font-size: 30px; }
+.g-mobile .cm-popup-actions .g-btn { height: 84px; }
+.g-mobile .cm-popup-close { width: 60px; height: 60px; font-size: 32px; top: 16px; right: 14px; }
+
+/* ── 스토리 ── */
+.g-mobile .st-box { height: 290px; padding: 30px 230px 0; }
+.g-mobile .st-name { font-size: 38px; }
+.g-mobile .st-name small { font-size: 16px; }
+.g-mobile .st-text { font-size: 34px; }
+.g-mobile .st-next { right: 230px; }
+.g-mobile .st-skip { scale: var(--m); transform-origin: top right; }
+.g-mobile .st-scene-label { scale: var(--m); transform-origin: top left; }
+.g-mobile .st-card-no { font-size: 20px; }
+.g-mobile .st-card-place { font-size: 24px; }
+.g-mobile .st-title-eyebrow { font-size: 19px; }
+.g-mobile .st-clear-sub { font-size: 32px; }
+.g-mobile .st-clear-hint { font-size: 24px; }
+
+/* ── 편성 ── */
+.g-mobile .fm-info { scale: 1.15; transform-origin: top left; }
+.g-mobile .fm-hint { font-size: 22px; right: 760px; }
+.g-mobile .fm-bench-note { font-size: 20px; }
+.g-mobile .fm-actions { scale: 1.12; transform-origin: bottom right; }
+.g-mobile .fm-slot-en { font-size: 15px; }
+.g-mobile .fm-slot-tag { font-size: 20px; }
+.g-mobile .fm-slot-empty { font-size: 22px; }
+.g-mobile .fm-story-btn small { font-size: 16px; }
+
+/* 캐릭터 목록 */
+.g-mobile .cl-card-name { font-size: 26px; }
+.g-mobile .cl-card-en { font-size: 14px; }
+.g-mobile .cl-card-flag { font-size: 20px; }
+.g-mobile .cl-r-eyebrow { font-size: 17px; }
+.g-mobile .cl-r-en { font-size: 22px; }
+.g-mobile .cl-stat b { font-size: 15px; }
+.g-mobile .cl-stat span { font-size: 32px; }
+.g-mobile .cl-skill-h { font-size: 22px; }
+.g-mobile .cl-tile-label { font-size: 19px; }
+.g-mobile .cl-tiles.is-small .cl-tile-label { font-size: 16px; }
+.g-mobile .cl-tile-sub { font-size: 14px; }
+.g-mobile .cl-hint { font-size: 18px; }
+.g-mobile .cl-draft { font-size: 17px; }
+.g-mobile .cl-actions .g-btn { height: 76px; font-size: 28px; }
+.g-mobile .cl-lock-note { font-size: 21px; flex: 1 1 auto; min-width: 0; }
+.g-mobile .cl-actions.is-view .g-btn { min-width: 150px; }
+.g-mobile .cl-lock-note .g-ico { width: 28px; height: 28px; }
+
+/* ── 전투 ── */
+/* HUD · 버튼: 붙어 있는 모서리 기준으로 확대 */
+/* 왼쪽 위 HUD: 바로 아래에 적 정보가 있으므로 크기(높이)는 그대로, 글씨만 키움 */
+.g-mobile .bt-hud-row { font-size: 24px; }
+.g-mobile .bt-hud-sub { font-size: 19px; }
+.g-mobile .bt-hud-tr { scale: var(--m); transform-origin: top right; }
+.g-mobile .bt-ctrl-l { font-size: 14px; }
+.g-mobile .bt-slot-n { font-size: 24px; }
+.g-mobile .bt-bench-wrap { scale: var(--m); transform-origin: bottom left; }
+.g-mobile .bt-swap-txt { font-size: 20px; }
+.g-mobile .bt-swap-txt small { font-size: 13px; }
+.g-mobile .bt-bolt { scale: 1.2; transform-origin: top right; }
+
+/* 손패 (오른쪽 아래 기준) */
+.g-mobile .bt-hand { scale: 1.2; transform-origin: bottom center; }
+.g-mobile .bt-hand-info { bottom: 320px; font-size: 17px; }
+.g-mobile .bt-card-name { font-size: 15px; }
+.g-mobile .bt-card-owner { font-size: 14px; }
+.g-mobile .bt-card-type { font-size: 20px; }
+
+/* 캐릭터 머리 위 정보 (체력 · 마력 · 이름 · 상태 아이콘) — 옆 캐릭터와 겹치지 않는 선까지 */
+.g-mobile .bt-unit-top { scale: 1.06; transform-origin: bottom center; }
+.g-mobile .bt-hp-txt { font-size: 17px; }
+.g-mobile .bt-unit-name { font-size: 19px; }
+.g-mobile .bt-mp-txt { font-size: 14px; }
+.g-mobile .bt-intent { font-size: 16px; height: 30px; }
+.g-mobile .bt-field-chip { font-size: 18px; }
+
+/* 연출 글씨 */
+.g-mobile .bt-callout { font-size: 25px; padding: 8px 18px; }
+.g-mobile .bt-callout small { font-size: 16px; }
+.g-mobile .bt-float { font-size: 60px; }
+.g-mobile .bt-float.is-heal { font-size: 44px; }
+.g-mobile .bt-float.is-status { font-size: 27px; }
+.g-mobile .bt-banner { font-size: 52px; height: 110px; }
+.g-mobile .bt-toast { font-size: 26px; }
+.g-mobile .bt-cine-label { scale: var(--m); transform-origin: bottom left; }
+.g-mobile .bt-cine.is-enemy .bt-cine-label { transform-origin: bottom right; }
+
+/* 대사 · 모달 · 결과 */
+.g-mobile .bt-intro-box { scale: var(--m); transform-origin: top left; }
+.g-mobile .bt-intro-hint { font-size: 22px; }
+.g-mobile .bt-modal-box { scale: 1.2; }
+.g-mobile .bt-result-sub { font-size: 36px; }
+.g-mobile .bt-result-hint { font-size: 24px; }
+.g-mobile .bt-result-actions { scale: 1.15; }
+
+/* 튜토리얼 안내창 */
+.g-mobile .tut-title { font-size: 27px; }
+.g-mobile .tut-text { font-size: 22px; }
+.g-mobile .tut-do { font-size: 19px; }
+.g-mobile .tut-next { height: 58px; font-size: 22px; }
+.g-mobile .bt-intro.is-center .bt-intro-box { transform-origin: center; }
+.g-mobile .bt-hand-tray { scale: 1.2; transform-origin: bottom center; }
