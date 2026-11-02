@@ -1,0 +1,136 @@
+/* ==============================================================================
+   2. 캐릭터 선택 — 햇살이 드는 탁자 위에 놓인 세로 사진들
+   · 밝은 색이 기본 (흰 나무 탁자 · 인화지), 갈색 · 금색은 쓰지 않음
+   · 사진(세로 직사각형) = 캐릭터 · 이름 · 속성 아이콘
+   · 누르면 사진이 타들어 가고 정보 창으로 이동 (code/js/burn.js)
+   ============================================================================== */
+
+.sl {
+  font-variant-numeric: lining-nums;
+  --ink: #2c2b29; --ink-2: #6e6b66; --ink-3: #a29e97; --line: rgba(44,43,41,0.14);
+  --accent: #c4532e;
+  background: #cfcbc3;
+  font-family: "Noto Sans KR", sans-serif;
+  color: var(--ink);
+}
+
+/* ── 탁자 ─────────────────────────────────────────── */
+.sl-table {
+  position: absolute; inset: 0;
+  background:
+    /* 나뭇결 */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.0025 0.07' numOctaves='4' seed='11'/%3E%3CfeColorMatrix values='0 0 0 0 0.42 0 0 0 0 0.38 0 0 0 0 0.33 0 0 0 0.42 -0.05'/%3E%3C/filter%3E%3Crect width='800' height='400' filter='url(%23n)'/%3E%3C/svg%3E") 0 0 / 800px 400px,
+    /* 판자 이음매 */
+    repeating-linear-gradient(180deg, transparent 0 219px, rgba(60,55,48,0.16) 219px 220px, rgba(255,255,255,0.5) 220px 221px, transparent 221px 222px),
+    linear-gradient(180deg, #d8d4cc, #cbc6bd);
+}
+/* 왼쪽 위 창가에서 들어오는 햇살 */
+.sl-sun {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(122deg, rgba(255,251,240,0) 18%, rgba(255,251,240,0.75) 30%, rgba(255,251,240,0.2) 44%, rgba(255,251,240,0) 52%),
+    linear-gradient(122deg, rgba(255,251,240,0) 50%, rgba(255,250,236,0.45) 58%, rgba(255,251,240,0) 68%),
+    radial-gradient(ellipse 70% 60% at 12% 0%, rgba(255,248,228,0.7), transparent 70%),
+    radial-gradient(ellipse 60% 50% at 100% 100%, rgba(70,74,80,0.14), transparent 70%);
+  mix-blend-mode: soft-light;
+  opacity: 0.6;
+}
+.sl-sun::after {   /* 빛이 닿는 곳을 조금 더 밝게 */
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(122deg, transparent 22%, rgba(255,253,246,0.16) 32%, transparent 46%);
+}
+/* 나뭇잎 그림자 */
+.sl-leaves { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.06; mix-blend-mode: multiply; pointer-events: none; }
+
+/* ── 상단 ─────────────────────────────────────────── */
+.sl-top { position: absolute; left: 48px; right: 48px; top: 34px; z-index: 10; display: flex; align-items: center; }
+.sl-back { display: flex; align-items: baseline; gap: 12px; color: var(--ink); }
+.sl-back svg { align-self: center; width: 30px; height: 30px; fill: none; stroke: currentColor; stroke-width: 2; }
+.sl-back b { font-family: "Cinzel", serif; font-size: 30px; font-weight: 700; letter-spacing: 0.06em; }
+.sl-back em { font-family: "Cormorant Garamond", serif; font-style: italic; font-size: 24px; color: var(--ink-2); }
+.sl-back:hover { color: var(--accent); }
+
+.sl-tools { margin-left: auto; display: flex; align-items: center; gap: 30px; }
+.sl-search { display: flex; align-items: center; gap: 8px; width: 210px; padding: 6px 2px; border-bottom: 1px solid var(--ink-3); }
+.sl-search svg { width: 18px; height: 18px; flex: none; fill: none; stroke: var(--ink-2); stroke-width: 2; }
+.sl-search input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; font: 500 16px "Noto Sans KR", sans-serif; color: var(--ink); }
+.sl-search input::placeholder { color: var(--ink-3); }
+.sl-search:focus-within { border-bottom-color: var(--ink); }
+
+.sl-elems { display: flex; gap: 4px; }
+.sl-elem { width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; color: var(--ink-3); transition: color 0.15s ease, background-color 0.15s ease; }
+.sl-elem .g-icon { width: 20px; height: 20px; }
+.sl-elem:hover { color: var(--ink); }
+.sl-elem.is-on { background: var(--el); color: #fff; }
+
+.sl-sorts { display: flex; align-items: center; }
+.sl-sorts button { position: relative; padding: 6px 14px; font: 500 16px "Noto Sans KR", sans-serif; color: var(--ink-3); }
+.sl-sorts button + button { border-left: 1px solid var(--line); }
+.sl-sorts button:hover { color: var(--ink); }
+.sl-sorts button.is-on { color: var(--ink); font-weight: 700; }
+.sl-sorts button.is-on::after { content: ""; position: absolute; left: 14px; right: 14px; bottom: -4px; height: 2px; background: var(--accent); }
+
+.sl-ico { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: var(--ink-2); }
+.sl-ico svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+.sl-ico:hover { color: var(--ink); }
+
+/* 기록 수 — 마스킹 테이프 */
+.sl-count {
+  position: absolute; left: 82px; top: 120px; z-index: 6;
+  padding: 6px 22px 7px; transform: rotate(-2deg);
+  font-family: "Cormorant Garamond", serif; font-size: 24px; font-weight: 600; color: #f5f3ee; letter-spacing: 0.04em;
+  background: rgba(58,57,54,0.86);
+  clip-path: polygon(0 6%, 3% 0, 6% 8%, 9% 1%, 100% 0, 97% 30%, 100% 55%, 98% 100%, 5% 100%, 2% 92%, 0 100%, 2% 60%);
+}
+
+/* ── 타로카드 목록 (한 줄 5장 · 아래로 스크롤) ───────── */
+.sl-row {
+  position: absolute; left: 0; right: 0; top: 170px; bottom: 0;
+  display: grid; grid-template-columns: repeat(5, 250px); justify-content: center; align-content: start; gap: 34px 40px;
+  padding: 6px 0 60px; overflow-y: auto; overflow-x: hidden;
+}
+.sl-row::-webkit-scrollbar { width: 6px; }
+.sl-row::-webkit-scrollbar-thumb { background: rgba(44,43,41,0.3); }
+.sl-empty { grid-column: 1 / -1; margin-top: 160px; text-align: center; font-size: 18px; color: var(--ink-2); }
+
+/* 카드: 크림색 종이 + 펜 선 테두리 (고깔모자의 아틀리에 풍 아르누보 장식) */
+.ph {
+  --ink-c: #3d342b;
+  position: relative; width: 250px; height: 420px; text-align: center;
+  color: var(--ink-c);
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' seed='3'/%3E%3CfeColorMatrix values='0 0 0 0 0.3 0 0 0 0 0.25 0 0 0 0 0.2 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E"),
+    #f3eee3;
+}
+.ph:hover { --ink-c: #1f1a15; }
+.ph:hover .ph-name { color: var(--accent); }
+.ph.is-burning { z-index: 20; }
+
+/* 아치 창 — 캐릭터 색 하늘 + 가는 햇살 선 */
+.ph-window {
+  position: absolute; left: 27px; top: 30px; width: 196px; height: 306px; overflow: hidden;
+  border-radius: 98px 98px 0 0;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--char) 45%, #f3eee3) 0%, color-mix(in srgb, var(--char) 22%, #f3eee3) 100%);
+}
+.ph-rays {
+  position: absolute; left: 50%; top: 80%; width: 600px; height: 600px; margin: -300px 0 0 -300px;
+  background: repeating-conic-gradient(from 0deg, rgba(255,250,235,0.55) 0deg 1.2deg, transparent 1.2deg 9deg);
+  -webkit-mask-image: radial-gradient(circle, transparent 18%, #000 30%, transparent 60%);
+          mask-image: radial-gradient(circle, transparent 18%, #000 30%, transparent 60%);
+}
+.ph-window img { position: absolute; left: 50%; top: 4px; height: 400px; transform: translateX(-50%); }
+.ph-window img.is-ph { top: auto; bottom: 0; height: 280px; opacity: 0.85; }
+
+.ph-frame { position: absolute; inset: 0; width: 100%; height: 100%; color: var(--ink-c); pointer-events: none; transition: color 0.15s ease; }
+.ph-ribbon {
+  position: absolute; left: 34px; right: 34px; top: 350px; height: 30px; line-height: 30px;
+  font-family: "Cinzel", serif; font-size: 13px; font-weight: 700; letter-spacing: 0.12em; color: var(--ink-c);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ph-cap { position: absolute; left: 0; right: 0; top: 384px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.ph-name { font-size: 15px; font-weight: 700; color: var(--ink-c); transition: color 0.15s ease; }
+.ph-elems { display: flex; gap: 3px; }
+.ph-elems i { width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; color: var(--el); }
+.ph-elems .g-icon { width: 15px; height: 15px; }
+
+.ph-burn { position: absolute; inset: 0; z-index: 5; width: 100%; height: 100%; pointer-events: none; }

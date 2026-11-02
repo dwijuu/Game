@@ -1,0 +1,137 @@
+/* ==============================================================================
+   1. 메인 화면 (로비) — 잔잔한 강의실 · 평평한 밝은 패널
+   · 메뉴 버튼 = 평평한 밝은 판 + 영문 제목 + 작은 한글 이름 + 옅은 그림 (외곽선 · 그림자 없음)
+   · 그 밖의 메뉴는 상자 없이 흰 아이콘 + 흰 글씨
+   · 재화 뒤에만 옅은 검정 블러 (둥근 알약 모양, 테두리 없음)
+   · 호버 시 움직임 없음 — 색만 바뀜
+   · 가장자리에 옅은 비네트
+   ============================================================================== */
+
+.lb {
+  --ink: #2b2925; --ink-2: #5f5b54; --ink-3: #8f8a81;
+  --on-dark: #f7f4ee; --on-dark-2: rgba(247, 244, 238, 0.72);
+  --panel: rgba(244, 241, 235, 0.92); --panel-hover: #fdfbf7;
+  --accent: #b5562f;           /* 호버 · 새 소식 표시 */
+  --hover-light: #f2c9a4;      /* 어두운 배경 위 글씨 호버 */
+  --sage: #7d9384;             /* 강조 판 하나 */
+  background: #1f1c18;
+}
+.lb button { transition: none; }
+.lb-bg { position: absolute; inset: 0; background: center 45% / cover no-repeat; filter: brightness(1.12) saturate(0.9); }
+.lb-hero { position: absolute; left: 420px; top: 60px; height: 1040px; pointer-events: none; }
+/* 옅은 비네트 */
+.lb-veil {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 80% 85% at 50% 46%, transparent 55%, rgba(12, 10, 8, 0.42) 100%);
+}
+.lb .is-locked { cursor: default; }
+
+/* ── 왼쪽 위: 플레이어 (상자 없음) ─────────────────── */
+.lb-player { position: absolute; left: 52px; top: 34px; display: flex; align-items: center; gap: 18px; color: var(--on-dark); }
+.lb-lv { display: flex; flex-direction: column; align-items: center; line-height: 1; padding-right: 18px; border-right: 1px solid rgba(247, 244, 238, 0.3); }
+.lb-lv small { font: 600 12px "Cinzel", serif; letter-spacing: 0.2em; margin-bottom: 4px; }
+.lb-lv b { font: 600 40px "Cormorant Garamond", serif; font-variant-numeric: lining-nums; }
+.lb-player-id { display: flex; flex-direction: column; gap: 6px; }
+.lb-nick { font-size: 26px; font-weight: 700; line-height: 1; }
+.lb-uid { font-size: 13px; font-weight: 500; letter-spacing: 0.08em; color: var(--on-dark-2); }
+.lb-exp { width: 160px; height: 2px; background: rgba(247, 244, 238, 0.25); }
+.lb-exp i { display: block; height: 100%; background: var(--on-dark); }
+
+/* ── 흰 아이콘 + 흰 글씨 (왼쪽 세로 · 오른쪽 아래) ───── */
+.lb-ico-btn { display: flex; flex-direction: column; align-items: center; gap: 8px; color: var(--on-dark); font-size: 16px; font-weight: 500; }
+.lb-ico-btn .lb-ico { width: 38px; height: 38px; }
+.lb-ico-btn:hover { color: var(--hover-light); }
+
+.lb-side { position: absolute; left: 50px; top: 160px; display: flex; flex-direction: column; gap: 30px; }
+.lb-side .lb-ico-btn { width: 84px; }
+
+/* ── 오른쪽 위: 재화 · 설정 ────────────────────────── */
+.lb-top { position: absolute; right: 44px; top: 30px; display: flex; align-items: center; gap: 12px; color: var(--on-dark); }
+.lb-cur {
+  display: flex; align-items: center; gap: 10px; height: 42px; padding: 0 22px 0 16px; font-size: 17px;
+  border-radius: 999px; background: rgba(14, 12, 10, 0.38);
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+}
+.lb-cur i { width: 20px; height: 20px; color: var(--on-dark-2); }
+.lb-cur i svg { width: 100%; height: 100%; }
+.lb-cur b { font-weight: 600; font-variant-numeric: lining-nums tabular-nums; }
+.lb-cur small { font-weight: 400; color: var(--on-dark-2); }
+.lb-top-sep { width: 14px; }
+.lb-top-btn { width: 44px; height: 44px; color: var(--on-dark); }
+.lb-top-btn .lb-ico { display: block; width: 32px; height: 32px; margin: 6px; }
+.lb-top-btn:hover { color: var(--hover-light); }
+
+/* ── 오른쪽: 주요 메뉴 (평평한 판) ───────────────────── */
+.lb-menu {
+  position: absolute; right: 150px; top: 214px; width: 540px;
+  display: grid; grid-template-columns: repeat(6, 1fr); grid-template-rows: 176px 132px 132px; gap: 8px;
+}
+.lb-card { position: relative; overflow: hidden; text-align: left; background: var(--panel); color: var(--ink); grid-column: span 2; }
+.lb-card:hover { background: var(--panel-hover); }
+.lb-card:hover .lb-card-txt em { color: var(--accent); }
+
+/* 옅은 그림 — 오른쪽에서 왼쪽으로 사라짐 */
+.lb-card-img {
+  position: absolute; inset: 0 0 0 30%; background: center / cover no-repeat;
+  opacity: 0.45; filter: saturate(0.6);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 60%);
+          mask-image: linear-gradient(90deg, transparent, #000 60%);
+}
+.lb-card-txt { position: absolute; left: 18px; bottom: 16px; display: flex; flex-direction: column; line-height: 1; }
+.lb-card-txt em { font: 600 21px "Cinzel", serif; font-style: normal; letter-spacing: 0.04em; color: var(--ink); }
+.lb-card-txt b { margin-top: 7px; font-size: 14px; font-weight: 500; color: var(--ink-2); }
+.lb-card-txt small { margin-top: 6px; font-size: 13px; color: var(--ink-3); }
+
+.lb-card-story { grid-column: 1 / -1; }
+.lb-card-story .lb-card-img { inset: 0 0 0 26%; opacity: 0.5; }
+.lb-card-story .lb-card-txt { left: 26px; bottom: 22px; }
+.lb-card-story .lb-card-txt em { font-size: 44px; letter-spacing: 0.06em; }
+.lb-card-story .lb-card-txt b { margin-top: 10px; font-size: 17px; font-weight: 700; color: var(--ink); }
+.lb-card-training, .lb-card-lesson { grid-column: span 3; }
+
+/* 강조 판 — 잔잔한 세이지 */
+.lb-card-recruit { background: var(--sage); }
+.lb-card-recruit .lb-card-txt em, .lb-card-recruit .lb-card-txt b { color: #f6f4ef; }
+.lb-card-recruit:hover { background: #8aa091; }
+.lb-card-recruit:hover .lb-card-txt em { color: #fff; }
+
+.lb-card-tag { position: absolute; left: 18px; top: 14px; font-size: 12px; font-weight: 700; color: var(--accent); }
+.lb-card-new { position: absolute; left: 18px; top: 16px; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+/* 지금은 누를 수 없는 판: 흐리게 + 오른쪽 위 자물쇠 · LOCKED (호버해도 바뀌지 않음) */
+.lb-card.is-locked { background: rgba(178, 174, 167, 0.84); }
+.lb-card.is-locked:hover { background: rgba(178, 174, 167, 0.84); }
+.lb-card.is-locked .lb-card-img { opacity: 0.16; filter: grayscale(1); }
+.lb-card.is-locked .lb-card-txt em, .lb-card.is-locked:hover .lb-card-txt em { color: rgba(43, 41, 37, 0.5); }
+.lb-card.is-locked .lb-card-txt b { color: rgba(43, 41, 37, 0.5); }
+.lb-card.is-locked .lb-card-tag { color: rgba(43, 41, 37, 0.5); }
+.lb-card-recruit.is-locked, .lb-card-recruit.is-locked:hover { background: rgba(104, 122, 110, 0.84); }
+.lb-card-recruit.is-locked .lb-card-txt em, .lb-card-recruit.is-locked:hover .lb-card-txt em, .lb-card-recruit.is-locked .lb-card-txt b { color: rgba(246, 244, 239, 0.6); }
+.lb-card-lock {
+  position: absolute; right: 14px; top: 13px; display: flex; align-items: center; gap: 6px;
+  font: 600 11px "Cinzel", serif; letter-spacing: 0.14em; color: var(--ink);
+}
+.lb-card-lock svg { width: 18px; height: 18px; }
+.lb-card-recruit .lb-card-lock { color: #fff; }
+
+/* ── 왼쪽 아래: 이벤트 배너 (상자 없음) ─────────────── */
+.lb-banner { position: absolute; left: 52px; bottom: 36px; width: 400px; }
+.lb-banner-view { position: relative; height: 124px; overflow: hidden; }
+.lb-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 0.6s ease; }
+.lb-slide.is-on { opacity: 1; }
+.lb-slide-img { position: absolute; inset: 0; background: center / cover no-repeat; filter: saturate(0.75); }
+.lb-slide-txt {
+  position: absolute; left: 0; right: 0; bottom: 0; padding: 30px 18px 12px; display: flex; flex-direction: column; gap: 3px; color: #fbf9f4;
+  background: linear-gradient(180deg, transparent, rgba(20, 18, 15, 0.65));
+}
+.lb-slide-txt em { font: 600 12px "Cinzel", serif; font-style: normal; letter-spacing: 0.2em; opacity: 0.85; }
+.lb-slide-txt b { font-size: 18px; font-weight: 700; }
+.lb-slide-txt small { font-size: 12px; opacity: 0.8; }
+.lb-banner-dots { display: flex; gap: 6px; margin-top: 10px; }
+.lb-banner-dots button { width: 22px; height: 2px; background: rgba(247, 244, 238, 0.3); }
+.lb-banner-dots button:hover { background: var(--on-dark-2); }
+.lb-banner-dots button.is-on { background: var(--on-dark); }
+
+/* ── 오른쪽 아래: 바로가기 (흰 아이콘 + 글씨 · 가는 세로선) ── */
+.lb-bottom { position: absolute; right: 44px; bottom: 30px; display: flex; align-items: center; }
+.lb-bottom .lb-ico-btn { width: 100px; }
+.lb-bottom .lb-ico-btn + .lb-ico-btn { border-left: 1px solid rgba(247, 244, 238, 0.22); }

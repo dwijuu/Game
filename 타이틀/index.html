@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Veridicus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&display=swap">
+  <style>
+    /* ==========================================================================
+       타이틀 — 타이틀/타이틀.png 위에 로고(Veridicus) · 아래 START
+       · 로고: 타이틀/로고.png 의 검은 바탕을 뺀 글씨만 (로고_먹색.png)
+         배경 가운데가 밝은 양피지라 글씨는 먹색으로 씀 (원본 흰 글씨는 로고.png 에 그대로 있음)
+       · 화면 어디든 누르면 메인화면으로 (로딩 화면을 거쳐 이동)
+       ========================================================================== */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #2a2017; }
+    body { cursor: pointer; user-select: none; -webkit-user-select: none; }
+
+    .tt-bg { position: fixed; inset: 0; background: url("타이틀.png") center / cover no-repeat; }
+    /* 가장자리만 아주 옅게 (가운데는 그대로 밝게) */
+    .tt-veil {
+      position: fixed; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse 80% 85% at 50% 48%, transparent 58%, rgba(40, 28, 18, 0.32) 100%);
+    }
+
+    .tt-logo {
+      position: fixed; left: 50%; top: 44%; width: min(52vw, 92vh); transform: translate(-50%, -50%);
+      animation: ttIn 1.6s ease 0.2s both;
+    }
+    .tt-logo img { display: block; width: 100%; height: auto; -webkit-user-drag: none; }
+
+    /* START — 아래 가운데, 천천히 숨 쉬듯 (밝은 양피지 위라서 먹색) */
+    .tt-start {
+      position: fixed; left: 50%; bottom: 13%; transform: translateX(-50%);
+      display: flex; align-items: center; gap: 18px;
+      font-family: "Cinzel", serif; font-weight: 600; font-size: clamp(14px, 1.15vw, 22px); letter-spacing: 0.5em; color: #2b2118;
+      animation: ttIn 1s ease 1.4s both, ttBreath 2.8s ease-in-out 2.4s infinite;
+    }
+    .tt-start::before, .tt-start::after { content: ""; width: clamp(28px, 3vw, 60px); height: 1px; background: rgba(43, 33, 24, 0.5); }
+    .tt-start span { margin-right: -0.5em; }   /* 글자 간격 때문에 오른쪽으로 쏠리는 것 보정 */
+
+    .tt-ver { position: fixed; left: 24px; top: 18px; font: 500 12px "Cinzel", serif; letter-spacing: 0.12em; color: rgba(248, 240, 224, 0.7); }
+
+    @keyframes ttIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes ttBreath { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  </style>
+</head>
+<body>
+  <!-- 사이트를 옮길 때 기록 공유 · 로딩 화면 (가장 먼저) -->
+  <script src="../게임/game-site/js/core/sync.js"></script>
+  <script src="../게임/game-site/js/core/loading.js"></script>
+
+  <div class="tt-bg"></div>
+  <div class="tt-veil"></div>
+  <div class="tt-ver">VER 0.1</div>
+
+  <h1 class="tt-logo"><img src="로고_먹색.png" alt="Veridicus"></h1>
+
+  <div class="tt-start"><span>START</span></div>
+
+  <script>
+    (function () {
+      var LOBBY = '../메인화면/index.html';
+      var going = false;
+      function start() {
+        if (going) return;
+        going = true;
+        G.loading.go(LOBBY);
+      }
+      document.addEventListener('click', start);
+      document.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') start(); });
+      /* 메인화면 큰 그림을 미리 받아 둠 (넘어갈 때 로딩이 짧도록) */
+      window.addEventListener('load', function () { new Image().src = '../게임/배경/강의실.png'; });
+    })();
+  </script>
+</body>
+</html>

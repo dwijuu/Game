@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CHARACTER CODEX</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;900&family=Gloock&family=Nanum+Myeongjo:wght@700;800&family=Noto+Sans+KR:wght@400;500;700;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Noto+Serif+KR:wght@400;500;700;900&display=swap">
+  <!-- 게임과 같은 디자인 토큰 · 버튼 · 패널 · 툴팁 · 설정 창 (게임 파일을 그대로 공유) -->
+  <link rel="stylesheet" href="../게임/game-site/css/base.css">
+  <link rel="stylesheet" href="../게임/game-site/css/theme.css">
+  <link rel="stylesheet" href="../게임/game-site/css/v2.css">
+  <link rel="stylesheet" href="../게임/game-site/css/restyle.css">
+  <!-- 메인화면 전용 -->
+  <link rel="stylesheet" href="code/css/common.css">
+  <link rel="stylesheet" href="code/css/lobby.css">
+  <link rel="stylesheet" href="code/css/select.css">
+  <link rel="stylesheet" href="code/css/detail.css">
+  <link rel="stylesheet" href="code/css/records.css">
+</head>
+<body>
+  <!-- 사이트를 옮길 때 기록 공유 · 로딩 화면 (가장 먼저) -->
+  <script src="../게임/game-site/js/core/sync.js"></script>
+  <script src="../게임/game-site/js/core/loading.js"></script>
+  <div id="viewport">
+    <div id="stage" class="g-canvas cx-canvas">
+
+      <!-- ════════════════════════════════════════════════════════════
+           1. 메인 화면 (로비)
+           ════════════════════════════════════════════════════════════ -->
+      <section id="view-lobby" class="cx-view lb">
+        <div class="lb-bg" id="lb-bg"></div>
+        <img class="lb-hero" id="lb-hero" alt="">
+        <div class="lb-veil" aria-hidden="true"></div>
+
+        <!-- 왼쪽 위: 플레이어 -->
+        <div class="lb-player">
+          <div class="lb-lv"><small>LV</small><b id="lb-level">0</b></div>
+          <div class="lb-player-id">
+            <div class="lb-nick" id="lb-nick"></div>
+            <div class="lb-uid">ID <span id="lb-uid"></span></div>
+            <div class="lb-exp"><i id="lb-level-meter"></i></div>
+          </div>
+          <button type="button" class="lb-gramo" id="lb-records" aria-label="축음기 · 배경 음악"><span class="lb-ico" data-icon="gramophone"></span><span>배경 음악</span></button>
+        </div>
+
+        <!-- 왼쪽 세로 메뉴 (아이콘 + 이름) -->
+        <nav class="lb-side" aria-label="소식">
+          <button type="button" class="lb-ico-btn" data-locked><span class="lb-ico" data-icon="notice"></span><span>공지</span></button>
+          <button type="button" class="lb-ico-btn" data-locked><span class="lb-ico" data-icon="mail"></span><span>우편</span></button>
+          <button type="button" class="lb-ico-btn" data-locked><span class="lb-ico" data-icon="event"></span><span>이벤트</span></button>
+          <button type="button" class="lb-ico-btn" data-locked><span class="lb-ico" data-icon="shop"></span><span>상점</span></button>
+          <button type="button" class="lb-ico-btn" data-locked><span class="lb-ico" data-icon="season"></span><span>시즌 패스</span></button>
+        </nav>
+
+        <!-- 오른쪽 위: 재화 · 설정 -->
+        <div class="lb-top">
+          <span class="lb-cur"><i data-icon="stamina"></i><b>120<small> / 120</small></b></span>
+          <span class="lb-cur"><i data-icon="coin"></i><b>12,345,689</b></span>
+          <span class="lb-cur"><i data-icon="gem"></i><b>12,345</b></span>
+          <span class="lb-top-sep" aria-hidden="true"></span>
+          <button type="button" class="lb-top-btn" data-locked aria-label="우편"><span class="lb-ico" data-icon="mail"></span></button>
+          <button type="button" class="lb-top-btn" id="lb-settings" aria-label="설정"><span class="lb-ico" data-icon="gear"></span></button>
+          <button type="button" class="lb-top-btn" data-locked aria-label="전체 메뉴"><span class="lb-ico" data-icon="grid"></span></button>
+        </div>
+
+        <!-- 오른쪽: 주요 메뉴 -->
+        <div class="lb-menu">
+          <button type="button" class="lb-card lb-card-story" id="btn-story">
+            <span class="lb-card-img" data-card="story"></span>
+            <span class="lb-card-txt"><em>STORY</em><b>스토리 모드</b><small>제1권 · 여정의 시작</small></span>
+          </button>
+          <button type="button" class="lb-card lb-card-training" data-locked>
+            <span class="lb-card-img" data-card="training"></span>
+            <span class="lb-card-tag">4일</span>
+            <span class="lb-card-txt"><em>TRAINING</em><b>훈련장</b></span>
+          </button>
+          <button type="button" class="lb-card lb-card-lesson" data-locked>
+            <span class="lb-card-img" data-card="lesson"></span>
+            <span class="lb-card-txt"><em>LESSON</em><b>보충 수업</b></span>
+          </button>
+          <button type="button" class="lb-card lb-card-recruit" data-locked>
+            <span class="lb-card-txt"><em>RECRUIT</em><b>캐릭터모집</b></span>
+          </button>
+          <button type="button" class="lb-card lb-card-diary" data-locked>
+            <span class="lb-card-img" data-card="diary"></span>
+            <span class="lb-card-txt"><em>DIARY</em><b>일지</b></span>
+          </button>
+          <button type="button" class="lb-card lb-card-manage" id="btn-manage">
+            <span class="lb-card-txt"><em>MEMBERS</em><b>캐릭터관리</b></span>
+            <span class="lb-card-new" aria-label="새 소식"></span>
+          </button>
+        </div>
+
+        <!-- 왼쪽 아래: 이벤트 배너 -->
+        <div class="lb-banner">
+          <div class="lb-banner-view" id="lb-banner-view"></div>
+          <div class="lb-banner-dots" id="lb-banner-dots"></div>
+        </div>
+
+        <!-- 오른쪽 아래: 바로가기 -->
+        <nav class="lb-bottom" aria-label="바로가기">
+          <button type="button" class="lb-ico-btn" data-locked><span class="lb-ico" data-icon="codex"></span><span>도감</span></button>
+          <button type="button" class="lb-ico-btn" data-locked><span class="lb-ico" data-icon="friends"></span><span>친구</span></button>
+          <button type="button" class="lb-ico-btn" data-locked><span class="lb-ico" data-icon="trophy"></span><span>업적</span></button>
+          <button type="button" class="lb-ico-btn" data-locked><span class="lb-ico" data-icon="guild"></span><span>길드</span></button>
+          <button type="button" class="lb-ico-btn" data-locked><span class="lb-ico" data-icon="guide"></span><span>가이드</span></button>
+        </nav>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════
+           2. 캐릭터 선택 — 햇살 드는 탁자 위에 놓인 사진들
+           ════════════════════════════════════════════════════════════ -->
+      <section id="view-select" class="cx-view sl" hidden>
+        <!-- 탁자 · 햇살 · 나뭇잎 그림자 -->
+        <div class="sl-table" aria-hidden="true"></div>
+        <svg class="sl-leaves" aria-hidden="true" viewBox="0 0 1920 886" preserveAspectRatio="none">
+          <defs>
+            <filter id="sl-leaf" x="0" y="0" width="100%" height="100%">
+              <feTurbulence type="fractalNoise" baseFrequency="0.013" numOctaves="4" seed="7"/>
+              <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -14 7"/>
+              <feGaussianBlur stdDeviation="3.5"/>
+            </filter>
+            <radialGradient id="sl-leaf-fade" cx="0.12" cy="0.05" r="0.75">
+              <stop offset="0" stop-color="#fff"/><stop offset="0.6" stop-color="#fff" stop-opacity="0.35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+            </radialGradient>
+            <mask id="sl-leaf-mask"><rect width="1920" height="886" fill="url(#sl-leaf-fade)"/></mask>
+          </defs>
+          <g mask="url(#sl-leaf-mask)"><rect width="1920" height="886" filter="url(#sl-leaf)"/></g>
+        </svg>
+        <div class="sl-sun" aria-hidden="true"></div>
+
+        <header class="sl-top">
+          <button type="button" class="sl-back" id="sl-back" aria-label="메인 화면">
+            <svg viewBox="0 0 24 24"><path d="M14.5 4.5 7 12l7.5 7.5M7 12h13"/></svg>
+            <b>Character</b>
+          </button>
+          <div class="sl-tools">
+            <label class="sl-search">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.4 15.4 21 21"/></svg>
+              <input type="text" id="sl-search" placeholder="이름 검색" autocomplete="off">
+            </label>
+            <div class="sl-elems" id="sl-elems" role="group" aria-label="속성"></div>
+            <div class="sl-sorts" id="sl-sort" role="group" aria-label="정렬">
+              <button type="button" data-sort="no" class="is-on">등록순</button>
+              <button type="button" data-sort="name">이름순</button>
+            </div>
+            <button type="button" class="sl-ico" id="sl-set" aria-label="설정" data-icon="gear"></button>
+          </div>
+        </header>
+
+        <div class="sl-count" id="sl-count"></div>
+        <div class="sl-row" id="sl-grid"></div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════
+           3. 캐릭터 정보 · 스킬
+           ════════════════════════════════════════════════════════════ -->
+      <!-- ═══ 4. 축음기 (레코드) — 메인화면 배경 음악 고르기 ═══ -->
+      <section id="view-records" class="cx-view rc" hidden>
+        <div class="rc-paper"></div>
+        <div class="rc-dark"></div>
+
+        <div class="rc-top">
+          <button type="button" class="rc-ico" id="rc-back" aria-label="메인 화면">
+            <svg viewBox="0 0 24 24"><path d="M20 4.5 4.5 12 20 19.5 15.5 12z"/></svg>
+          </button>
+          <div class="rc-heading"><b>Records</b><span>축음기</span></div>
+          <button type="button" class="rc-ico rc-set" id="rc-set" aria-label="설정" data-icon="gear"></button>
+        </div>
+
+        <!-- 왼쪽: 곡 목록 -->
+        <div class="rc-list">
+          <div class="rc-h">배경 음악 <em>Soundtrack</em></div>
+          <ol class="rc-tracks" id="rc-tracks"></ol>
+        </div>
+
+        <!-- 가운데: 레코드 · 톤암 -->
+        <div class="rc-deck">
+          <div class="rc-platter"></div>
+          <div class="rc-disc" id="rc-disc">
+            <img class="rc-vinyl" src="images/records/record.webp" alt="">
+            <div class="rc-label">
+              <img src="../타이틀/로고_먹색.png" alt="">
+              <span id="rc-label-title"></span>
+              <i></i>
+            </div>
+          </div>
+          <svg class="rc-arm" id="rc-arm" viewBox="0 0 120 470" aria-hidden="true">
+            <rect class="rc-arm-weight" x="47" y="0" width="26" height="22" rx="3"/>
+            <circle class="rc-arm-base" cx="60" cy="40" r="27"/>
+            <circle class="rc-arm-pin" cx="60" cy="40" r="9"/>
+            <path class="rc-arm-rod" d="M60 40V360l-14 46"/>
+            <path class="rc-arm-head" d="M34 400l22 7-8 30-22-7z"/>
+          </svg>
+        </div>
+
+        <!-- 오른쪽: 앨범 · 설명 -->
+        <div class="rc-info">
+          <img class="rc-cover" id="rc-cover" alt="">
+          <div class="rc-artist">Veridicus · Original Soundtrack</div>
+          <div class="rc-title" id="rc-title"></div>
+          <div class="rc-ko" id="rc-ko"></div>
+          <div class="rc-h">소개 <em>Info</em></div>
+          <p class="rc-desc" id="rc-desc"></p>
+          <div class="rc-actions">
+            <button type="button" class="g-btn g-btn-primary rc-play" id="rc-play" data-sfx="none">재생</button>
+            <span class="rc-state" id="rc-state">재생 중</span>
+            <label class="rc-vol" id="rc-vol" aria-label="배경 음악 음량">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h3l6 4V6L7 10z"/><path d="M16.5 9.5a3.5 3.5 0 0 1 0 5"/></svg>
+              <input type="range" min="0" max="100" step="1"><output></output>
+            </label>
+          </div>
+          <div class="rc-progress"><span id="rc-cur">0:00</span><i><b id="rc-bar"></b></i><span id="rc-dur">0:00</span></div>
+        </div>
+      </section>
+
+      <section id="view-detail" class="cx-view dt" hidden>
+        <div class="dt-paper" aria-hidden="true"></div>
+        <div class="dt-dark" aria-hidden="true"></div>
+
+        <header class="dt-top">
+          <button type="button" class="dt-ico-btn is-light" id="dt-back" aria-label="캐릭터 목록">
+            <svg viewBox="0 0 24 24"><path d="M20 4.5 4.5 12 20 19.5 15.5 12z"/></svg>
+          </button>
+          <button type="button" class="dt-ico-btn is-light" id="dt-home" aria-label="메인 화면">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+          <button type="button" class="dt-ico-btn dt-set" id="dt-set" aria-label="설정" data-icon="gear"></button>
+        </header>
+
+        <!-- 왼쪽 (어두운 면): 기본 정보 -->
+        <div class="dt-info">
+          <div class="dt-emblem" id="dt-emblem"></div>
+          <div class="dt-no" id="dt-no"></div>
+          <h2 class="dt-name"><span id="dt-name-ico"></span><b id="dt-name"></b></h2>
+          <div class="dt-en" id="dt-en"></div>
+          <p class="dt-role" id="dt-role"></p>
+          <div class="dt-tags" id="dt-tags"></div>
+
+          <div class="dt-h is-dark">개인 정보 <em>Status</em></div>
+          <dl class="dt-stats" id="dt-stats"></dl>
+
+          <!-- 음악 플레이어 (재생 중 CD 회전) -->
+          <div class="cx-player" id="cx-player" hidden>
+            <div class="cx-player-disc"><img id="cx-player-art" alt=""><i></i></div>
+            <div class="cx-player-body">
+              <div class="cx-player-meta">
+                <div><b id="cx-player-title">No Track</b><span id="cx-player-artist">Standby</span></div>
+                <button type="button" class="cx-player-mute" id="cx-player-mute" aria-label="음소거"><svg viewBox="0 0 24 24" id="cx-player-vol"></svg></button>
+              </div>
+              <div class="cx-player-bar" id="cx-player-bar"><i id="cx-player-progress"></i></div>
+              <div class="cx-player-ctrl">
+                <button type="button" id="cx-player-prev" aria-label="이전 곡"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg></button>
+                <button type="button" id="cx-player-play" class="is-main" aria-label="재생"><svg viewBox="0 0 24 24" id="cx-player-play-ico"><path d="M8 5v14l11-7z"/></svg></button>
+                <button type="button" id="cx-player-next" aria-label="다음 곡"><svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6zM16 6v12h2V6z"/></svg></button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 가운데: 캐릭터 -->
+        <div class="dt-hero">
+          <img class="dt-hero-img" id="dt-hero-img" alt="">
+        </div>
+        <!-- 왼쪽 끝: 캐릭터 아이콘 (눌러서 이동) -->
+        <nav class="dt-rail" id="dt-rail" aria-label="캐릭터"></nav>
+
+        <!-- 오른쪽 (밝은 면): 스킬 · 특성 -->
+        <div class="dt-side">
+          <div class="dt-h">스킬 <em>Skill</em></div>
+          <div class="dt-orbit">
+            <svg class="dt-orbit-line" viewBox="0 0 640 220" preserveAspectRatio="none" aria-hidden="true"><ellipse cx="320" cy="118" rx="306" ry="62"/><circle cx="16" cy="128" r="4"/><circle cx="380" cy="179" r="5"/></svg>
+            <div class="dt-sk-list" id="dt-sk-list"></div>
+          </div>
+          <article class="dt-sk-detail" id="dt-sk-detail"></article>
+          <div class="dt-h">특성 <em>Trait</em></div>
+          <ul class="dt-traits" id="dt-mechs"></ul>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <div class="g-rotate-notice">가로모드 화면에서 감상해 주세요</div>
+  <div id="g-tooltip" class="g-tooltip" role="tooltip"></div>
+  <div id="yt-player-host" class="cx-yt-host"></div>
+
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <!-- 타로카드 테두리 (펜 선 · 별 · 덩굴) — 250 x 420 -->
+      <symbol id="tarot-frame" viewBox="0 0 250 420">
+        <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="7" y="7" width="236" height="406" stroke-width="1.3"/>
+          <rect x="12" y="12" width="226" height="396" stroke-width="0.6"/>
+          <path d="M27 336V128a98 98 0 0 1 196 0v208z" stroke-width="1.4"/>
+          <path d="M21 342V128a104 104 0 0 1 208 0v214" stroke-width="0.6"/>
+          <!-- 양옆 덩굴 -->
+          <path d="M21 330c-8-14-8-32 0-46M21 260c-7-12-7-26 0-38M229 330c8-14 8-32 0-46M229 260c7-12 7-26 0-38" stroke-width="0.8"/>
+          <path d="M15 300c3-5 9-6 12-2-4 4-9 4-12 2zM15 242c3-5 9-6 12-2-4 4-9 4-12 2zM235 300c-3-5-9-6-12-2 4 4 9 4 12 2zM235 242c-3-5-9-6-12-2 4 4 9 4 12 2z" stroke-width="0.7"/>
+          <!-- 모서리 -->
+          <path d="M12 40c10 0 18-8 18-18 0-6-4-10-9-10M238 40c-10 0-18-8-18-18 0-6 4-10 9-10M12 380c10 0 18 8 18 18 0 6-4 10-9 10M238 380c-10 0-18 8-18 18 0 6 4 10 9 10" stroke-width="0.8"/>
+          <!-- 리본 -->
+          <path d="M34 350h182l-8 15 8 15H34l8-15z" stroke-width="1.1"/>
+          <path d="M26 356h14M210 356h14" stroke-width="0.7"/>
+        </g>
+        <g fill="currentColor">
+          <path d="M125 16l2.6 7.4 7.4 2.6-7.4 2.6-2.6 7.4-2.6-7.4-7.4-2.6 7.4-2.6z"/>
+          <path d="M104 24l1.6 4.4 4.4 1.6-4.4 1.6-1.6 4.4-1.6-4.4-4.4-1.6 4.4-1.6zM146 24l1.6 4.4 4.4 1.6-4.4 1.6-1.6 4.4-1.6-4.4-4.4-1.6 4.4-1.6z"/>
+          <circle cx="12" cy="128" r="1.6"/><circle cx="238" cy="128" r="1.6"/>
+        </g>
+      </symbol>
+      <g id="i-back" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="miter"><path d="M16 4 7 12l9 8"/></g>
+    </defs>
+  </svg>
+
+  <!-- 게임 데이터 · 공용 모듈 (게임 파일을 그대로 불러옴 — 캐릭터 · 스킬은 여기서만 관리) -->
+  <script src="../게임/game-site/js/data/statuses.js"></script>
+  <script src="../게임/game-site/js/data/characters.js"></script>
+  <script src="../게임/game-site/js/data/chapters.js"></script>
+  <script src="../게임/game-site/js/core/util.js"></script>
+  <script src="../게임/game-site/js/core/art.js"></script>
+  <script src="../게임/game-site/js/core/save.js"></script>
+  <script src="../게임/game-site/js/core/tooltip.js"></script>
+  <script src="../게임/game-site/js/core/line-icons.js"></script>
+  <script src="../게임/game-site/js/core/settings.js"></script>
+  <!-- 메인화면 -->
+  <script src="code/js/data.js"></script>
+  <script src="code/js/audio.js"></script>
+  <script src="code/js/icons.js"></script>
+  <script src="code/js/player.js"></script>
+  <script src="code/js/records.js"></script>
+  <script src="code/js/app.js"></script>
+  <script src="code/js/burn.js"></script>
+  <script src="https://www.youtube.com/iframe_api"></script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+/* ==============================================================================
+   4. 축음기 (레코드) — 메인화면 배경 음악 고르기
+   · 캐릭터 정보 화면과 같은 바탕: 왼쪽 블랙 → 오른쪽 화이트
+   · 왼쪽 곡 목록 · 가운데 레코드판(라벨 = 앨범 로고) + 놋쇠 톤암 · 오른쪽 앨범 · 설명
+   · 테두리 · 그림자 없음, 호버는 색만 바뀜. 움직임은 판 회전과 톤암 내려오기뿐
+   ============================================================================== */
+
+.rc {
+  --ink: #2b2826; --ink-2: #77726b; --ink-3: #a29d96;
+  --on-dark: #f2ede5; --on-dark-2: rgba(242, 237, 229, 0.62); --on-dark-3: rgba(242, 237, 229, 0.36);
+  --accent: #c4532e;
+  --brass: #b49863; --brass-dk: #8c744a;
+  font-family: "Noto Sans KR", sans-serif;
+  background: #ece9e3;
+}
+.rc button { transition: color 0.15s ease, background-color 0.15s ease; }
+
+/* 바탕 */
+.rc-paper { position: absolute; inset: 0; background: url("../../../게임/배경/화이트.png") center / cover no-repeat, #ecebe8; }
+.rc-dark {
+  position: absolute; inset: 0; pointer-events: none;
+  background: url("../../../게임/배경/블랙.png") left center / cover no-repeat;
+  -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 30%, rgba(0,0,0,0.8) 40%, rgba(0,0,0,0.3) 52%, transparent 62%);
+          mask-image: linear-gradient(90deg, #000 0%, #000 30%, rgba(0,0,0,0.8) 40%, rgba(0,0,0,0.3) 52%, transparent 62%);
+}
+
+/* 위 */
+.rc-top { position: absolute; left: 40px; right: 44px; top: 30px; z-index: 6; display: flex; align-items: center; gap: 22px; }
+.rc-ico { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: var(--on-dark); }
+.rc-ico svg { width: 30px; height: 30px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linejoin: round; }
+.rc-ico:hover { color: #fff; }
+.rc-heading { display: flex; align-items: baseline; gap: 12px; color: var(--on-dark); }
+.rc-heading b { font: 700 30px "Cinzel", serif; letter-spacing: 0.06em; }
+.rc-heading span { font-size: 15px; color: var(--on-dark-2); }
+.rc-set { margin-left: auto; color: var(--ink-2); }
+.rc-set:hover { color: var(--ink); }
+
+.rc-h { display: flex; align-items: baseline; gap: 10px; font-size: 20px; font-weight: 700; }
+.rc-h em { font-family: "Cormorant Garamond", serif; font-style: italic; font-size: 17px; font-weight: 500; }
+
+/* ── 왼쪽: 곡 목록 ─────────────────────────────── */
+.rc-list { position: absolute; left: 120px; top: 170px; width: 450px; z-index: 4; color: var(--on-dark); }
+.rc-list .rc-h em { color: var(--on-dark-3); }
+.rc-tracks { list-style: none; margin: 20px 0 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.rc-track {
+  width: 100%; display: grid; grid-template-columns: 34px 56px 1fr auto; align-items: center; gap: 16px;
+  padding: 10px 16px 10px 10px; text-align: left; color: var(--on-dark-2);
+}
+.rc-track img { width: 56px; height: 56px; object-fit: cover; filter: grayscale(0.4) brightness(0.8); }
+.rc-no { font: 600 17px "Cormorant Garamond", serif; color: var(--on-dark-3); font-variant-numeric: lining-nums; text-align: center; }
+.rc-name { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.rc-name b { font: 600 19px "Cormorant Garamond", serif; letter-spacing: 0.02em; color: inherit; }
+.rc-name small { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--on-dark-3); }
+.rc-name em { font: 600 10px "Cinzel", serif; font-style: normal; letter-spacing: 0.16em; color: var(--accent); filter: brightness(1.3); }
+.rc-time { font: 500 16px "Cormorant Garamond", serif; color: var(--on-dark-3); font-variant-numeric: lining-nums; }
+.rc-track:hover { color: var(--on-dark); }
+.rc-track:hover img { filter: none; }
+.rc-track.is-on { background: rgba(242, 237, 229, 0.08); color: #fff; }
+.rc-track.is-on img { filter: none; }
+.rc-track.is-on .rc-time { color: var(--on-dark-2); }
+.rc-note { margin-top: 22px; font-size: 13px; color: var(--on-dark-3); }
+
+/* ── 가운데: 레코드판 · 톤암 ───────────────────── */
+.rc-deck { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3; }
+.rc-platter { position: absolute; left: 588px; top: 158px; width: 624px; height: 624px; border-radius: 50%; background: #262422; }
+.rc-disc { position: absolute; left: 600px; top: 170px; width: 600px; height: 600px; border-radius: 50%; }
+.rc-vinyl { display: block; width: 100%; height: 100%; -webkit-user-drag: none; }   /* 배경/레코드.png 에서 흰 바탕을 지운 판 */
+/* 라벨 = 앨범 로고 */
+.rc-label {   /* 판 그림의 원래 라벨을 덮는 앨범 로고 라벨 */
+  position: absolute; left: 50%; top: 50%; width: 252px; height: 252px; margin: -126px 0 0 -126px; border-radius: 50%;
+  background: #efe8da; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+}
+.rc-label img { width: 172px; height: auto; margin-top: 8px; }
+.rc-label span { font: 600 10px "Cinzel", serif; letter-spacing: 0.18em; color: #5b5146; text-transform: uppercase; }
+.rc-label i { position: absolute; left: 50%; top: 50%; width: 10px; height: 10px; margin: -5px 0 0 -5px; border-radius: 50%; background: #151413; }
+/* 33⅓ 회전 (1.8초에 한 바퀴) — 멈추면 그 자리에서 멈춤 */
+@keyframes rcSpin { to { transform: rotate(360deg); } }
+.rc-disc { animation: rcSpin 1.8s linear infinite; animation-play-state: paused; }
+.rc-disc.is-spinning { animation-play-state: running; }
+
+/* 톤암: 받침(놋쇠) · 막대 · 헤드 — 재생하면 판 위로 내려옴 */
+.rc-arm {
+  position: absolute; left: 1166px; top: 120px; width: 120px; height: 470px; overflow: visible;
+  transform-origin: 60px 40px; transform: rotate(-6deg);
+  transition: transform 0.9s cubic-bezier(.45, .05, .25, 1);
+}
+.rc-arm.is-down { transform: rotate(21deg); }
+.rc-arm.is-now { transition: none; }
+.rc-arm-weight { fill: #3a3633; }
+.rc-arm-base { fill: var(--brass); }
+.rc-arm-pin { fill: var(--brass-dk); }
+.rc-arm-rod { fill: none; stroke: var(--brass); stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
+.rc-arm-head { fill: #3a3633; }
+
+/* ── 오른쪽: 앨범 · 설명 ───────────────────────── */
+.rc-info { position: absolute; left: 1330px; top: 118px; width: 470px; z-index: 4; color: var(--ink); }
+.rc-cover { display: block; width: 210px; height: 210px; object-fit: cover; }
+.rc-artist { margin-top: 22px; font: 600 12px "Cinzel", serif; letter-spacing: 0.16em; color: var(--ink-3); }
+.rc-title { margin-top: 6px; font: 600 38px "Cormorant Garamond", serif; line-height: 1.05; color: var(--ink); }
+.rc-ko { margin-top: 4px; font-size: 16px; color: var(--ink-2); }
+.rc-meta { display: flex; gap: 28px; margin: 16px 0 0; }
+.rc-meta div { display: flex; flex-direction: column; gap: 2px; }
+.rc-meta dt { font: 600 10px "Cinzel", serif; letter-spacing: 0.16em; color: var(--ink-3); }
+.rc-meta dd { margin: 0; font: 600 18px "Cormorant Garamond", serif; color: var(--ink); font-variant-numeric: lining-nums; }
+.rc-info .rc-h { margin-top: 24px; color: var(--ink); }
+.rc-info .rc-h em { color: var(--ink-2); }
+.rc-desc { margin-top: 8px; min-height: 52px; font-size: 15px; line-height: 1.75; color: var(--ink-2); word-break: keep-all; }
+.rc-actions { display: flex; align-items: center; gap: 18px; margin-top: 26px; }
+.rc-play { min-width: 150px; height: 50px; font-size: 18px; }
+.rc-play.is-stop { background: var(--ink); color: #f2ede5; }
+.rc-play.is-stop:hover:not(:disabled) { background: #000; color: #fff; }
+.rc-state { display: inline-flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 700; color: var(--accent); }
+.rc-state::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+.rc-state[hidden] { display: none; }
+/* 배경 음악 음량 (설정 창과 같은 값) */
+.rc-vol { margin-left: auto; display: flex; align-items: center; gap: 10px; color: var(--ink-2); }
+.rc-vol svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round; }
+.rc-vol input {
+  -webkit-appearance: none; appearance: none; width: 130px; height: 3px; border-radius: 2px; outline: none; cursor: pointer;
+  background: linear-gradient(90deg, var(--ink) 0 var(--p, 50%), rgba(43, 40, 38, 0.18) var(--p, 50%) 100%);
+}
+.rc-vol input::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--ink); border: 0; }
+.rc-vol input::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: var(--ink); border: 0; }
+.rc-vol output { width: 30px; text-align: right; font: 600 17px "Cormorant Garamond", serif; color: var(--ink); font-variant-numeric: lining-nums; }
+.rc-progress { display: flex; align-items: center; gap: 14px; margin-top: 26px; font: 500 15px "Cormorant Garamond", serif; color: var(--ink-2); font-variant-numeric: lining-nums tabular-nums; }
+.rc-progress i { position: relative; flex: 1; height: 2px; background: rgba(43, 40, 38, 0.15); }
+.rc-progress b { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: var(--ink); }
+
+/* 메인화면 왼쪽 위: 축음기 버튼 (아이콘만) */
+.lb-gramo { margin-left: 14px; display: flex; flex-direction: column; align-items: center; gap: 6px; color: var(--on-dark, #f7f4ee); font-size: 13px; font-weight: 500; }
+.lb-gramo .lb-ico { width: 34px; height: 34px; }
+.lb-gramo:hover { color: var(--hover-light, #f2c9a4); }

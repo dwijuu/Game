@@ -1,0 +1,26 @@
+{
+  "game": "AGENT_GAME",
+  "format": 1,
+  "exportedAt": "2026-11-02T00:00:00.000Z",
+  "save": {
+    "v": 1,
+    "cleared": {},
+    "team": [
+      null,
+      null,
+      null,
+      null
+    ],
+    "settings": {
+      "speed": 1,
+      "auto": false
+    },
+    "decks": []
+  },
+  "sound": {
+    "bgm": true,
+    "bgmVol": 0.5,
+    "sfx": true,
+    "sfxVol": 0.8
+  }
+}
